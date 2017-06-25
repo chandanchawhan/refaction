@@ -1,4 +1,8 @@
-﻿using System.Web.Http;
+﻿using Microsoft.Practices.Unity;
+using refactor_me.Core;
+using refactor_me.Persistence;
+using refactor_me.Resolver;
+using System.Web.Http;
 
 namespace refactor_me
 {
@@ -19,6 +23,10 @@ namespace refactor_me
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            var container = new UnityContainer();
+            container.RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager());
+            config.DependencyResolver = new UnityResolver(container);
         }
     }
 }
